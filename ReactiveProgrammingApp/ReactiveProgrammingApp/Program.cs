@@ -1,21 +1,37 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reactive.Subjects;
 
 namespace ReactiveProgrammingApp
 {
-    class Program
+    public class Program : IObserver<float>
     {
-        static void Main(string[] args)
+        public Program()
         {
-            // The code provided will print ‘Hello World’ to the console.
-            // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
-            Console.WriteLine("Hello World!");
-            Console.ReadKey();
+            var market = new Subject<float>();
+            market.Subscribe(this);
 
-            // Go to http://aka.ms/dotnet-get-started-console to continue learning how to build a console app! 
+            market.OnNext(1.24f);
+        }
+
+        public void OnNext(float value)
+        {
+            Console.WriteLine($"Market gave us {value}");
+        }
+
+        public void OnError(Exception error)
+        {
+            Console.WriteLine($"We got an error {error.Message}");
+        }
+
+        public void OnCompleted()
+        {
+            Console.WriteLine($"Sequence is complete");
+        }
+
+        private static void Main(string[] args)
+        {
+            var program = new Program();
+            Console.ReadLine();
         }
     }
 }
